@@ -3,8 +3,10 @@ package se.stylianosgakis.mviexample.ui.main
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import se.stylianosgakis.mviexample.R
+import se.stylianosgakis.mviexample.ui.main.state.MainStateEvent
 
 class MainFragment : Fragment() {
 
@@ -25,6 +27,29 @@ class MainFragment : Fragment() {
         viewModel = activity?.run {
             ViewModelProvider(this).get(MainViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
+
+        subscribeObservers()
+    }
+
+    private fun subscribeObservers() {
+        viewModel.dataState.observe(viewLifecycleOwner, Observer { dataState ->
+            println("DEBUG: DataState: $dataState")
+            dataState.blogPosts?.let { blogPosts ->
+                viewModel.setBlogListData(blogPosts)
+            }
+            dataState.user?.let { user ->
+                viewModel.setUserData(user)
+            }
+        })
+
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
+            viewState.blogPosts?.let {
+                println("DEBUG: Setting blog posts to RecyclerView: $it")
+            }
+            viewState.user?.let {
+                println("DEBUG: Setting user data: $it")
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -35,13 +60,21 @@ class MainFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_get_user -> {
-                //TODO functionality for clicking get user menu option
+                triggerGetUserEvent()
             }
             R.id.action_get_blogs -> {
-                //TODO functionality for clicking get blogs menu option
+                triggerGetBlogsEvent()
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun triggerGetBlogsEvent() {
+        viewModel.setStateEvent(MainStateEvent.GetBlogPostsEvent())
+    }
+
+    private fun triggerGetUserEvent() {
+        viewModel.setStateEvent(MainStateEvent.GetUserEvent("1"))
     }
 
 }
