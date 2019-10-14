@@ -52,11 +52,10 @@ class MainViewModel : ViewModel() {
         _viewState.value = update
     }
 
-    fun getCurrentViewStateOrNew(): MainViewState {
-        val value = viewState.value?.let {
-            it
+    private fun getCurrentViewStateOrNew(): MainViewState {
+        return viewState.value?.let { mainViewState ->
+            mainViewState
         } ?: MainViewState()
-        return value
     }
 
     fun setStateEvent(event: MainStateEvent) {

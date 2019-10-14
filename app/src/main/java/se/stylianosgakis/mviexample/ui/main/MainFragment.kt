@@ -10,7 +10,7 @@ import se.stylianosgakis.mviexample.ui.main.state.MainStateEvent
 
 class MainFragment : Fragment() {
 
-    lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,11 +59,11 @@ class MainFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_get_user -> {
-                triggerGetUserEvent()
-            }
             R.id.action_get_blogs -> {
                 triggerGetBlogsEvent()
+            }
+            R.id.action_get_user -> {
+                triggerGetUserEvent()
             }
         }
         return super.onOptionsItemSelected(item)

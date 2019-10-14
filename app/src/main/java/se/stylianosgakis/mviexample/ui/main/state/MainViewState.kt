@@ -4,6 +4,6 @@ import se.stylianosgakis.mviexample.model.BlogPost
 import se.stylianosgakis.mviexample.model.User
 
 data class MainViewState(
-    var user: User? = null,
-    var blogPosts: List<BlogPost>? = null
+    var blogPosts: List<BlogPost>? = null,
+    var user: User? = null
 )
