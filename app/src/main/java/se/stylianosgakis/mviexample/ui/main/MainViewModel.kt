@@ -2,18 +2,40 @@ package se.stylianosgakis.mviexample.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import se.stylianosgakis.mviexample.ui.main.state.MainStateEvent
+import se.stylianosgakis.mviexample.ui.main.state.MainStateEvent.*
 import se.stylianosgakis.mviexample.ui.main.state.MainViewState
+import se.stylianosgakis.mviexample.util.AbsentLiveData
 
 class MainViewModel : ViewModel() {
 
-    //This is the singe mutable live data object that wraps around the MainViewState class and will
-    //be observed for any kind of changes
+    private val _stateEvent: MutableLiveData<MainStateEvent> = MutableLiveData()
     private val _viewState: MutableLiveData<MainViewState> = MutableLiveData()
 
-    //This live data will be the one that is exposed to the other classes to be observed.
-    //This naming convention is used in Google Samples therefore is common practice
     val viewState: LiveData<MainViewState>
         get() = _viewState
+
+    val dataState: LiveData<MainViewState> = Transformations
+        .switchMap(_stateEvent) { stateEvent ->
+            stateEvent?.let {
+                handleStateEvent(it)
+            }
+        }
+
+    private fun handleStateEvent(stateEvent: MainStateEvent): LiveData<MainViewState> {
+        return when (stateEvent) {
+            is GetBlogPostsEvent -> {
+                AbsentLiveData.create()
+            }
+            is GetUserEvent -> {
+                AbsentLiveData.create()
+            }
+            is None -> {
+                AbsentLiveData.create()
+            }
+        }
+    }
 
 }
