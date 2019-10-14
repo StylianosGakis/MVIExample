@@ -6,6 +6,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import se.stylianosgakis.mviexample.model.BlogPost
 import se.stylianosgakis.mviexample.model.User
+import se.stylianosgakis.mviexample.repository.main.MainRepository
 import se.stylianosgakis.mviexample.ui.main.state.MainStateEvent
 import se.stylianosgakis.mviexample.ui.main.state.MainStateEvent.*
 import se.stylianosgakis.mviexample.ui.main.state.MainViewState
@@ -13,8 +14,11 @@ import se.stylianosgakis.mviexample.util.AbsentLiveData
 
 class MainViewModel : ViewModel() {
 
-    private val _stateEvent: MutableLiveData<MainStateEvent> = MutableLiveData()
+    //The viewState that contains all the information about the model classes
     private val _viewState: MutableLiveData<MainViewState> = MutableLiveData()
+
+    //Used to set the state of the event triggered by the viewModel
+    private val _stateEvent: MutableLiveData<MainStateEvent> = MutableLiveData()
 
     val viewState: LiveData<MainViewState>
         get() = _viewState
@@ -29,10 +33,10 @@ class MainViewModel : ViewModel() {
     private fun handleStateEvent(stateEvent: MainStateEvent): LiveData<MainViewState> {
         return when (stateEvent) {
             is GetBlogPostsEvent -> {
-                AbsentLiveData.create()
+                return MainRepository.getBlogPosts()
             }
             is GetUserEvent -> {
-                AbsentLiveData.create()
+                return MainRepository.getUser(stateEvent.userId)
             }
             is None -> {
                 AbsentLiveData.create()

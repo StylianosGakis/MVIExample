@@ -10,7 +10,7 @@ import se.stylianosgakis.mviexample.util.GenericApiResponse
 interface ApiService {
 
     @GET("placeholder/blogs")
-    fun getUser(): LiveData<GenericApiResponse<List<BlogPost>>>
+    fun getBlogPosts(): LiveData<GenericApiResponse<List<BlogPost>>>
 
     @GET("placeholder/user/{userId}")
     fun getUser(
