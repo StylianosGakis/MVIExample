@@ -1,8 +1,9 @@
-package se.stylianosgakis.mviexample
+package se.stylianosgakis.mviexample.ui.main
 
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import se.stylianosgakis.mviexample.R
 
 class MainFragment : Fragment() {
     override fun onCreateView(
