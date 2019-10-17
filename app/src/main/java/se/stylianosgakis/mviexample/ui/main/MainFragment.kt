@@ -6,14 +6,18 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.fragment_main.*
 import se.stylianosgakis.mviexample.R
 import se.stylianosgakis.mviexample.ui.DataStateListener
 import se.stylianosgakis.mviexample.ui.main.state.MainStateEvent
+import se.stylianosgakis.mviexample.util.TopSpacingItemDecoration
 
 class MainFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var dataStateListener: DataStateListener
+    private lateinit var mainRecyclerAdapter: MainRecyclerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,6 +36,7 @@ class MainFragment : Fragment() {
         } ?: throw Exception("Invalid Activity")
 
         subscribeObservers()
+        initRecyclerView()
     }
 
     override fun onAttach(context: Context) {
@@ -65,13 +70,24 @@ class MainFragment : Fragment() {
         })
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
-            viewState.blogPosts?.let {
-                println("DEBUG: Setting blog posts to RecyclerView: $it")
+            viewState.blogPosts?.let { blogPosts ->
+                println("DEBUG: Setting blog posts to RecyclerView: $blogPosts")
+                mainRecyclerAdapter.submitList(blogPosts)
             }
             viewState.user?.let {
                 println("DEBUG: Setting user data: $it")
             }
         })
+    }
+
+    private fun initRecyclerView() {
+        recycler_view.apply {
+            layoutManager = LinearLayoutManager(activity)
+            val topSpacingDecorator = TopSpacingItemDecoration(30)
+            addItemDecoration(topSpacingDecorator)
+            mainRecyclerAdapter = MainRecyclerAdapter()
+            adapter = mainRecyclerAdapter
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
