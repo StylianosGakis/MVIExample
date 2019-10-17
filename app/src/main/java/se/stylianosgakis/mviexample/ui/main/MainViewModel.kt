@@ -34,10 +34,10 @@ class MainViewModel : ViewModel() {
     private fun handleStateEvent(stateEvent: MainStateEvent): LiveData<DataState<MainViewState>> {
         return when (stateEvent) {
             is GetBlogPostsEvent -> {
-                return MainRepository.getBlogPosts()
+                MainRepository.getBlogPosts()
             }
             is GetUserEvent -> {
-                return MainRepository.getUser(stateEvent.userId)
+                MainRepository.getUser(stateEvent.userId)
             }
             is None -> {
                 AbsentLiveData.create()

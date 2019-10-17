@@ -4,6 +4,6 @@ import se.stylianosgakis.mviexample.util.DataState
 
 interface DataStateListener {
 
-    fun onDataStateChange(dataState: DataState<*>)
+    fun onDataStateChange(dataState: DataState<*>?)
 
 }
